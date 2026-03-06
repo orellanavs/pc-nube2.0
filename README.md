@@ -17,11 +17,16 @@
 ## ✅ Qué incluye
 
 - 🖥️ Ubuntu XFCE completo en el navegador
-- 🎮 RetroArch con cores GBA, DS y 3DS
-- 🖼️ Wallpaper personalizado
+- 🎮 RetroArch con cores GBA, SNES, DS y 3DS
 - ⏰ Keepalive automático (no se apaga solo)
 - 🐳 Auto-restart si se cae
-- 📦 curl, wget, git, nano, htop, neofetch
+- 📦 wget, curl, git, nano, vim, htop, neofetch
+- 🗜️ zip, unzip, p7zip (todos los formatos)
+- 🎬 ffmpeg, imagemagick
+- 🐍 Python3, pip
+- 🟩 Node.js, npm
+- 🔧 gcc, g++, make, build-essential
+- 🌐 net-tools, ping, nmap
 
 ---
 
@@ -32,6 +37,10 @@ Descarga tu ROM y córrela desde la terminal del Ubuntu:
 **GBA:**
 ```bash
 retroarch -L /config/.config/retroarch/cores/mgba_libretro.so ~/Downloads/juego.gba
+```
+**SNES:**
+```bash
+retroarch -L /config/.config/retroarch/cores/snes9x_libretro.so ~/Downloads/juego.sfc
 ```
 **DS:**
 ```bash
