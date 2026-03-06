@@ -1,6 +1,6 @@
 #!/bin/bash
 # ============================================
-#   PC-CLOUD AUTO SETUP
+#   PC-CLOUD AUTO SETUP v2
 # ============================================
 
 echo "╔════════════════════════════════════╗"
@@ -33,33 +33,39 @@ docker run -d \
 echo "⏳ Esperando que inicie (25s)..."
 sleep 25
 
-# ── 2. Instalar dependencias base ─────────
-echo "📦 Instalando dependencias base..."
-docker exec pc-nube bash -c "apt-get update -qq && apt-get install -y -qq wget curl git nano htop neofetch unzip --no-install-recommends"
-
-# ── 3. Wallpaper ──────────────────────────
-echo "🖼️  Aplicando wallpaper..."
+# ── 2. Actualizar sistema e instalar TODO ──
+echo "📦 Actualizando sistema e instalando herramientas..."
 docker exec pc-nube bash -c "
-  wget -q -O /usr/share/backgrounds/xfce/custom.png 'https://i.imgur.com/Nnlim7a.png' &&
-  DISPLAY=:1 xfconf-query -c xfce4-desktop \
-    -p /backdrop/screen0/monitorVNC-0/workspace0/last-image \
-    -s /usr/share/backgrounds/xfce/custom.png 2>/dev/null || true
-" && echo "✅ Wallpaper OK" || echo "⚠️ Wallpaper falló"
+  apt-get update -qq &&
+  apt-get upgrade -y -qq &&
+  apt-get install -y -qq \
+    wget curl git nano vim htop neofetch \
+    unzip zip p7zip-full p7zip-rar \
+    ffmpeg imagemagick \
+    python3 python3-pip nodejs npm \
+    net-tools iputils-ping nmap \
+    screen tmux \
+    build-essential gcc g++ make \
+    fonts-noto-color-emoji \
+    --no-install-recommends
+" && echo "✅ Herramientas instaladas" || echo "⚠️ Algo falló"
 
-# ── 4. RetroArch + cores ──────────────────
+# ── 3. RetroArch + cores ──────────────────
 echo "🎮 Instalando RetroArch..."
 docker exec pc-nube bash -c "
-  apt-get install -y -qq retroarch &&
+  apt-get install -y -qq retroarch unzip &&
   mkdir -p /config/.config/retroarch/cores &&
   wget -q 'https://buildbot.libretro.com/nightly/linux/x86_64/latest/mgba_libretro.so.zip' -P /tmp &&
   unzip -q /tmp/mgba_libretro.so.zip -d /config/.config/retroarch/cores/ &&
   wget -q 'https://buildbot.libretro.com/nightly/linux/x86_64/latest/melonds_libretro.so.zip' -P /tmp &&
   unzip -q /tmp/melonds_libretro.so.zip -d /config/.config/retroarch/cores/ &&
   wget -q 'https://buildbot.libretro.com/nightly/linux/x86_64/latest/citra_libretro.so.zip' -P /tmp &&
-  unzip -q /tmp/citra_libretro.so.zip -d /config/.config/retroarch/cores/
+  unzip -q /tmp/citra_libretro.so.zip -d /config/.config/retroarch/cores/ &&
+  wget -q 'https://buildbot.libretro.com/nightly/linux/x86_64/latest/snes9x_libretro.so.zip' -P /tmp &&
+  unzip -q /tmp/snes9x_libretro.so.zip -d /config/.config/retroarch/cores/
 " && echo "✅ RetroArch OK" || echo "⚠️ RetroArch falló"
 
-# ── 5. Super Script keepalive ─────────────
+# ── 4. Super Script keepalive ─────────────
 echo "⚙️  Iniciando Super Script..."
 while true; do
   echo -ne "\r⏰ $(date '+%H:%M:%S') | RAM: $(free -m | awk 'NR==2{printf "%.0f%%", $3*100/$2}') | Disco: $(df -h / | awk 'NR==2{print $5}')"
@@ -75,4 +81,5 @@ echo "║  🌐 Abre el puerto 3000            ║"
 echo "║  👤 Usuario: forgex                ║"
 echo "║  🔑 Password: pc-nube              ║"
 echo "║  🎮 RetroArch listo                ║"
+echo "║  📦 Python, Node, Git y más        ║"
 echo "╚════════════════════════════════════╝"
