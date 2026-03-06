@@ -1,0 +1,15 @@
+{
+  "name": "PC-Cloud",
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+  "features": {
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {}
+  },
+  "postStartCommand": "bash .devcontainer/setup.sh",
+  "forwardPorts": [3000],
+  "portsAttributes": {
+    "3000": {
+      "label": "PC-Cloud Ubuntu",
+      "onAutoForward": "openBrowser"
+    }
+  }
+}
