@@ -48,19 +48,7 @@ docker exec pc-nube bash -c "
     --no-install-recommends
 " && echo "✅ Herramientas instaladas" || echo "⚠️ Algo falló"
 
-# ── 3. Chromium en español ────────────────
-echo "🌐 Configurando Chromium en español..."
-docker exec pc-nube bash -c "
-  mkdir -p /config/.config/chromium/Default &&
-  cat > /config/.config/chromium/Default/Preferences << 'CHROMEPREF'
-{
-  \"intl\": {\"accept_languages\": \"es-SV,es,en-US,en\"},
-  \"translate\": {\"enabled\": true}
-}
-CHROMEPREF
-"
-
-# ── 4. Keepalive dentro del contenedor ────
+# ── 3. Keepalive dentro del contenedor ────
 echo "⚙️  Iniciando keepalive..."
 docker exec -d pc-nube bash -c '
   while true; do
@@ -69,7 +57,7 @@ docker exec -d pc-nube bash -c '
   done
 '
 
-# ── 5. Keepalive del Codespace ────────────
+# ── 4. Keepalive del Codespace ────────────
 while true; do
   echo -ne "\r⏰ $(date '+%H:%M:%S') | RAM: $(free -m | awk 'NR==2{printf "%.0f%%", $3*100/$2}') | Disco: $(df -h / | awk 'NR==2{print $5}')"
   docker ps | grep -q "pc-nube" || docker start pc-nube 2>/dev/null
